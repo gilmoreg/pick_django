@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from poll.controllers import mal
+from controllers import mal
 
 def index(request):
     ''' Render the homepage '''
