@@ -1,0 +1,107 @@
+{% extends 'poll/layout.html' %}
+{% load staticfiles %}
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'poll/styles/home.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="section" id="createPoll">
+    <div class="columns">
+      <div class="column is-narrow div mcenter">
+        <div class="section box640">
+          <div class="card">
+            <div class="card-content">
+              <div class="content tcenter">
+                <p class="tleft">Ever had a long list of shows you want to watch and don't know where to start? What if you could create a poll out of your list, share it with your friends, and have them vote on what you should watch next?</p>
+                <p class="tleft">For fans of anime, <strong>Pick</strong> makes this easy by creating a poll out of a MyAnimeList Plan To Watch list which can be shared on social media.</p>
+                <p class="tleft">If you aren't a fan of anime and don't have a MAL account, no problem! You can still see the site in action using the demo account.</p>
+                <p>Username: pickdemo</p>
+                <p>Password: p1ckm03d3m0</p>
+                <p class="tleft">Just enter your Myanimelist login and get a poll in seconds! Then click the link to your new poll and vote for something to see the results!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section mcenter box640">
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">Create a Poll</p>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                <form action="/poll/create" class="tcenter" method="POST" id="credentials">
+                  <p>Please enter your MyAnimeList login.</p>
+                  <p>These values will never be stored. <i id="help" class="fa fa-question-circle-o" aria-hidden="true"></i></p>
+                  <div class="field">
+                    <p class="control tcenter">
+                      <input type="text" id="mal-username" placeholder="mal username" value="pickdemo" required>
+                    </p>
+                  </div>
+                  <div class="field">
+                    <p class="control tcenter">
+                      <input type="password" id="mal-password" placeholder="mal password" value="p1ckm03d3m0" required>
+                    </p>
+                    <div class="mal-error error"></div>
+                  </div>
+                  <div class="field">
+                    <p class="control tcenter">
+                      <button class="button" id="submitForm">Submit</button>
+                    </p>
+                  </div>
+                  <div id="mal-error" class="tcenter error"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section hidden" id="newList">
+    <div class="columns">
+      <div class="column is-narrow mcenter">
+        <div class="box box400">
+          <p class="tcenter">Success! Your poll can be found here:</p>
+          <p class="tcenter" id="link">Link goes here</p>
+          <p class="tcenter">
+            <button id="reddit">Post on reddit <i class="fa fa-reddit" aria-hidden="true"></i></button>
+          </p>
+          <p class="tcenter" id="twitter"></p>
+          <p class="tcenter">Need to refresh your list or reset votes? Just log in again on the homepage!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="helpModal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box box400">
+        <h4 class="tcenter">Why do I have to enter my password?</h4>
+        <p>This is to ensure that only the owners of Myanimelist accounts can reset their lists. Otherwise anyone could reset your vote total at any time!</p>
+        <h4 class="tcenter">Is it secure?</h4>
+        <p>Pick uses the same technology that MAL does for security. Your credentials will be passed along to MAL to make sure you are a valid user, and then immediately discarded.</p>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+  <div class="modal" id="redditModal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box box400">
+        <p class="tcenter" id="reddit">Post on reddit <i class="fa fa-reddit" aria-hidden="true"></i></p>
+        <hr />
+        <p class="tcenter">Copy and paste into a Reddit comment!</p>
+        <p class="tcenter"><input type="text" id="reddit-md">
+          <button class="copy" data-clipboard-target="#reddit-md"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+        </p>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script src="{% static 'poll/js/clipboard.min.js' %}"></script>
+  <script src="{% static 'poll/js/home.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,87 @@
+/* globals $, $$, window, fetch */
+
+/* bling.js Modified to make $ querySelector and $$ qSA */
+window.$ = document.querySelector.bind(document);
+window.$$ = document.querySelectorAll.bind(document);
+Node.prototype.on = window.on = function (name, fn) {
+  this.addEventListener(name, fn);
+};
+NodeList.prototype.__proto__ = Array.prototype;
+NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn) {
+  this.forEach(function (elem, i) {
+    elem.on(name, fn);
+  });
+};
+
+const Poll = (() => {
+  const apiCall = (url, body) =>
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+    .then(res => res.json())
+    .catch(err => Error(err));
+
+  const closeModal = () => {
+    const modal = $('.is-active');
+    if (modal) modal.classList.remove('is-active');
+  };
+
+  const openModal = function (e) { // eslint-disable-line func-names
+    // So that the anchors aren't circumvented by preventDefault
+    if (e.target.tagName === 'A') return;
+    e.preventDefault();
+    // Open the modal
+    const modal = $(`#modal-${this.dataset.animeid}`);
+    if (modal) modal.classList.add('is-active');
+  };
+
+  const vote = function () { // eslint-disable-line func-names
+    this.classList.add('is-loading');
+    const id = $('.is-active').id.split('-')[1];
+    let url = window.location.pathname;
+    if (url[url.length - 1] === '/') url = url.slice(0, -1);
+    apiCall(`${url}/vote`, { id })
+    .then(() => {
+      window.location.assign(`${url}/result`);
+    })
+    .catch((err) => {
+      this.classList.remove('is-loading');
+      // Have we voted already?
+      // if (err.includes('429')) {
+        // TODO error
+      // }
+      console.error(err);
+    });
+  };
+
+  return {
+    init: () => {
+      Array.from($$('[data-animeid]')).forEach((li) => {
+        li.on('click', openModal);
+      });
+      Array.from($$('.modal-close')).forEach((closer) => {
+        closer.on('click', closeModal);
+      });
+      Array.from($$('.modal-background')).forEach((background) => {
+        background.on('click', closeModal);
+      });
+      Array.from($$('.vote-button')).forEach((button) => {
+        button.on('click', vote);
+      });
+
+      window.addEventListener('keyup', (e) => {
+        if (e.key === 'Escape') closeModal(e);
+      });
+    },
+  };
+})();
+
+(() => {
+  Poll.init();
+})();

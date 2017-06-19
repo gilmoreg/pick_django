@@ -2,9 +2,13 @@
 .vscode
 notes
 settings_secret*
+
+__pycache__
 bin
 include
 lib
+migrations
+
 pip-selfcheck.json
 manage.py
 .Python

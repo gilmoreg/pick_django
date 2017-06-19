@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Pick.moe{% endblock %}</title>
+  <meta name="description" content="Create a poll from your Myanimelist Plan To Watch list!">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+  <link rel="stylesheet" href="{% static 'poll/styles/bulma.css' %}">
+  <link rel="stylesheet" href="{% static 'poll/styles/style.css' %}">
+  {% block styles %}
+  {% endblock %}
+</head>
+<body>
+  <nav class="nav has-shadow">
+    <div class="nav-left">
+      <div class="nav-item">
+        <p>Pick.moe</p>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a class="button is-primary nav-item" href="/">Create a Poll</a>
+    </div>
+  </nav>
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+  <footer>
+    {% block footer %}
+    <p>
+      This application is open source. You can examine the code <a href="https://github.com/gilmoreg/pick2" rel="noopener noreferrer" target="_blank">here</a>. Please report problems on the <a href="https://github.com/gilmoreg/pick2/issues" rel="noopener noreferrer" target="_blank">Gitub Issues page</a>.
+    </p>
+    <p>Pick.moe © 2017 by <a href="https://github.com/gilmoreg/" rel="noopener noreferrer" target="_blank">Grayson Gilmore</a>. All rights reserved.</p>
+    {% endblock %}
+  </footer>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+  {% block scripts %}
+  {% endblock %}
+  </body>
+</html>
