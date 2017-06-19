@@ -1,0 +1,10 @@
+*pyc
+.vscode
+notes
+settings_secret*
+bin
+include
+lib
+pip-selfcheck.json
+manage.py
+.Python
