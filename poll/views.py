@@ -1,18 +1,23 @@
 from django.shortcuts import render
 from controllers import mal
+from .models import Poll
+from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     ''' Render the homepage '''
     return render(request, 'poll/index.html')
 
+@csrf_exempt
 def create_poll(request):
     '''
     Create a new poll
-    POST paramater: auth (a btoa HTTP basic auth string representing the user's MAL login)
+    POST body: auth (a btoa HTTP basic auth string representing the user's MAL login)
     '''
     # need error checking
-    ptw_list = mal.get_list(request.POST.get('auth'))
-    # this is called by an ajax request, so what do we do?
-    # can try to move away from single page, but in this case it is such a small amount of info
-    # could be something like /poll/<user>/share
-    return render(request, 'poll/index.html', {'ptw_list': ptw_list})
+    username = mal.check_mal_credentials(request.POST.get('auth'))
+    if not username:
+        return render(request, 'poll/index.html', {'error': 'Invalid credentials'})
+    poll = Poll(user=username, list_origin='myanimelist', created=datetime.now())
+    mal.save_poll_options(poll, username)
+    return render(request, 'poll/index.html')

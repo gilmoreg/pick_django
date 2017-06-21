@@ -57,8 +57,9 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn
       const malUser = user.value.trim();
       const malPass = pass.value.trim();
       submit.classList.add('is-loading');
-      apiCall('/mal/create', { auth: btoa(`${malUser}:${malPass}`) })
+      apiCall('/poll/create', { auth: btoa(`${malUser}:${malPass}`) })
       .then((res) => {
+        console.log(res);
         submit.classList.remove('is-loading');
         if (res.poll) showList(res.poll);
         else showMalError('Username and password did not match or no user found.');
