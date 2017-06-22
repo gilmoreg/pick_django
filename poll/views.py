@@ -10,9 +10,10 @@ def index(request):
     ''' Render the homepage '''
     return render(request, 'poll/index.html')
 
-def poll(request, user):
+def poll(request, username):
     ''' Render a poll by user '''
-    print('request ' + user)
+    poll_object = Poll.objects.get(user=username)
+    print(poll_object)
     anime = {
         'title': 'test',
         'image': 'test',
@@ -37,6 +38,7 @@ def create_poll(request):
     if not username:
         return render(request, 'poll/index.html', {'error': 'Invalid credentials'})
     poll = Poll(user=username, list_origin='myanimelist', created=datetime.now())
+    poll.save()
     mal.save_poll_options(poll, username)
     print poll
     return JsonResponse({
