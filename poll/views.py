@@ -1,4 +1,5 @@
 import json
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from controllers import mal
@@ -21,8 +22,11 @@ def create_poll(request):
         if auth:
             username = mal.check_mal_credentials(auth)
     if not username:
-        print('Authentication failed')
         return render(request, 'poll/index.html', {'error': 'Invalid credentials'})
     poll = Poll(user=username, list_origin='myanimelist', created=datetime.now())
     mal.save_poll_options(poll, username)
-    return render(request, 'poll/index.html')
+    print poll
+    return JsonResponse({
+        'success': True,
+        'user': username
+    })

@@ -29,7 +29,7 @@
             </header>
             <div class="card-content">
               <div class="content">
-                <form action="/poll/create" class="tcenter" method="POST" id="credentials">
+                <form action="{% url 'create_poll' %}" class="tcenter" method="POST" id="credentials">
                   <p>Please enter your MyAnimeList login.</p>
                   <p>These values will never be stored. <i id="help" class="fa fa-question-circle-o" aria-hidden="true"></i></p>
                   <div class="field">
