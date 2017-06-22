@@ -24,7 +24,7 @@ def save_poll_options(poll, username):
     ''' Gets a Myanimelist plan to watch list given a HTTP basic auth string '''
     # A lot of this code comes from https://searchcode.com/codesearch/view/76919603/
     try:
-        raw_mal_list = requests.get('https://myanimelist.net/malappinfo.php?status=all&type=anime&u={username}').text
+        raw_mal_list = requests.get('https://myanimelist.net/malappinfo.php?status=all&type=anime&u=' + username).text
         # Malappinfo has some bad xml, this helps clean it up
         uni_list = unicode(raw_mal_list.content, 'utf-8', 'replace')
         xmldata = BeautifulSoup(uni_list)

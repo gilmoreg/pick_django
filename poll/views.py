@@ -37,8 +37,14 @@ def create_poll(request):
             username = mal.check_mal_credentials(auth)
     if not username:
         return render(request, 'poll/index.html', {'error': 'Invalid credentials'})
-    poll = Poll(user=username, list_origin='myanimelist', created=datetime.now())
-    poll.save()
+    try:
+        poll = Poll.objects.get(user=username)
+        if poll:
+            # Only way to cascade delete all of the Anime objects
+            poll.delete()
+    except:
+        print('Creating poll')
+    poll = Poll.objects.create(user=username, list_origin='myanimelist', created=datetime.now())
     mal.save_poll_options(poll, username)
     print poll
     return JsonResponse({
