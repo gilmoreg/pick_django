@@ -9,13 +9,15 @@ from datetime import date, datetime
 def check_mal_credentials(auth):
     ''' Using auth string, validate credentials '''
     try:
-        response = requests.get('https://myanimelist.net/api/account/verify_credentials.xml', params={'Authorization': 'Basic {auth}'}).text
+        response = requests.get('https://myanimelist.net/api/account/verify_credentials.xml', headers={'Authorization': 'Basic ' + auth}).text
         if response == 'Invalid credentials' or response == 'Unable to connect to MAL':
+            print('Invalid credentials')
             return False
-        xml = ET.fromstring(response).text
         # 0=id, 1=username
-        return xml[1].text
+        return ET.fromstring(response)[1].text
     except:
+        print('Something went wrong')
+        raise
         return False
 
 def save_poll_options(poll, username):
