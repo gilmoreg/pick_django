@@ -10,6 +10,19 @@ def index(request):
     ''' Render the homepage '''
     return render(request, 'poll/index.html')
 
+def poll(request, user):
+    ''' Render a poll by user '''
+    print('request ' + user)
+    anime = {
+        'title': 'test',
+        'image': 'test',
+        'anime_id': '123'
+    }
+    poll = {
+        'anime_list': [ anime ]
+    }
+    return render(request, 'poll/poll.html', { 'user': 'pickdemo', 'poll': poll })
+
 @csrf_exempt
 def create_poll(request):
     '''

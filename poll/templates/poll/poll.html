@@ -1,6 +1,6 @@
 {% extends 'poll/layout.html' %}
 {% load staticfiles %}
-{% block title %}Pick.moe - ${user}{% endblock %}
+{% block title %}Pick.moe - {{user}}{% endblock %}
 {% block styles %}
   <link rel="stylesheet" href="{% static 'poll/styles/poll.css' %}">
 {% endblock %}
@@ -9,17 +9,17 @@
   <div class="section" id="poll">
     <div class="is-narrow div mcenter">
       <h1 class="tcenter">
-        What should <a href="http://myanimelist.net/profile/{% user %}" rel="noopener noreferrer" target="_blank">{% user%}</a> watch next?
+        What should <a href="http://myanimelist.net/profile/{{user}}" rel="noopener noreferrer" target="_blank">{{user}}</a> watch next?
       </h1>
       <div class="box">
         <ul>
-          {% for anime in poll.list %}
-            <li data-animeID="{% anime.id %}">
+          {% for anime in poll.anime_list %}
+            <li data-animeID="{{anime.id}}">
               <div class="columns is-mobile">
                 <div class="column is-2">
-                  <img src="{% anime.image %}" alt="{% anime.title %}">
+                  <img src="{{anime.image}}" alt="{{anime.title}}">
                 </div>  
-                <div class="column is-10">{% anime.title %}</div> 
+                <div class="column is-10">{{anime.title}}</div> 
               </div>
             </li>
           {% endfor %}
@@ -28,11 +28,11 @@
     </div>
   </div>
     
-  {% for anime in poll.list %}
-    {% include 'poll/mixins/_listmodal.html' anime %}
+  {% for anime in poll.anime_list %}
+    {% include 'poll/mixins/_listmodal.html' with anime=anime %}
   {% endfor %}
 {% endblock %}
 
-[% block scripts %}
+{% block scripts %}
   <script type="text/javascript" src="{% static '/scripts/poll.js' %}"></script>
 {% endblock %}
