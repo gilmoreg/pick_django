@@ -32,6 +32,7 @@ def save_poll_options(poll, username):
         filtered_list = xmldata.myanimelist.findAll('anime', 'my_status'==6, recursive = True)
         for node in filtered_list:
             # Filter out if hasn't aired yet
+            print(node)
             (year, month, day) = node.find('series_start').text.split('-')
             start = datetime(int(year), int(month), int(day))
             if start > datetime.now():
@@ -43,5 +44,7 @@ def save_poll_options(poll, username):
             a = Anime(id=anime_id, title=anime_title, image=anime_image, poll=poll)
             if not a:
                 print('Error creating anime {anime_title}')
-    except:
+    except Exception, e:
+        print('Something went wrong!')
+        print(e)
         return []
