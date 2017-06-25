@@ -13,7 +13,7 @@
       </h1>
       <div class="box">
         <ul>
-          {% for anime in poll.anime_list %}
+          {% for anime in poll.anime_set.all %}
             <li data-animeID="{{anime.id}}">
               <div class="columns is-mobile">
                 <div class="column is-2">
@@ -34,5 +34,5 @@
 {% endblock %}
 
 {% block scripts %}
-  <script type="text/javascript" src="{% static '/scripts/poll.js' %}"></script>
+  <script type="text/javascript" src="{% static 'poll/js/poll.js' %}"></script>
 {% endblock %}
