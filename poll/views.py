@@ -72,3 +72,11 @@ def vote(request, username):
             'success': False,
             'message': 'Invalid ID or anime not found'
         }, status=400)
+
+def result(request, username):
+    ''' Render poll results by user '''
+    try:      
+        poll = Poll.objects.get(user=username)
+    except:
+        return render(request, 'poll/index.html', {'error': 'Poll not found'})
+    return render(request, 'poll/result.html', { 'user': username, 'poll': poll })
