@@ -40,8 +40,35 @@ def create_poll(request):
         print('Creating poll')
     poll = Poll.objects.create(user=username, list_origin='myanimelist', created=datetime.now())
     mal.save_poll_options(poll, username)
-    print poll
     return JsonResponse({
         'success': True,
         'user': username
     })
+
+def vote(request, username):
+    '''
+    Vote on a poll
+    POST body: id (the id of the anime voted for)
+    '''
+    a_id = ''
+    for i in request:
+        a_id = json.loads(i)['id']
+    if not a_id:
+        return JsonResponse({
+            'success': False,
+            'message': 'ID not supplied'
+        }, status=400)
+    try:
+        poll = Poll.objects.get(user=username)
+        anime = poll.anime_set.get(a_id=a_id)
+        vote_count = int(anime.votes) + 1
+        anime.votes = str(vote_count)
+        anime.save()
+        return JsonResponse({
+            'success': True,
+        })
+    except:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid ID or anime not found'
+        }, status=400)
