@@ -12,17 +12,11 @@ def index(request):
 
 def poll(request, username):
     ''' Render a poll by user '''
-    poll_object = Poll.objects.get(user=username)
-    print(poll_object)
-    anime = {
-        'title': 'test',
-        'image': 'test',
-        'anime_id': '123'
-    }
-    poll = {
-        'anime_list': [ anime ]
-    }
-    return render(request, 'poll/poll.html', { 'user': 'pickdemo', 'poll': poll })
+    try:      
+        poll = Poll.objects.get(user=username)
+    except:
+        return render(request, 'poll/index.html', {'error': 'Poll not found'})
+    return render(request, 'poll/poll.html', { 'user': username, 'poll': poll })
 
 @csrf_exempt
 def create_poll(request):

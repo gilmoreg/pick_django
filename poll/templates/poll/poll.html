@@ -28,7 +28,7 @@
     </div>
   </div>
     
-  {% for anime in poll.anime_list %}
+  {% for anime in poll.anime_set.all %}
     {% include 'poll/mixins/_listmodal.html' with anime=anime %}
   {% endfor %}
 {% endblock %}
