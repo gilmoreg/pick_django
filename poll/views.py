@@ -1,3 +1,4 @@
+''' Django Views '''
 import json
 from django.http import JsonResponse
 from django.shortcuts import render
