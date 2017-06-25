@@ -69,18 +69,15 @@ def vote(request, username):
         }, status=400)
     try:
         poll = Poll.objects.get(user=username)
-        print('poll')
-        print(poll)
         anime = poll.anime_set.get(a_id=a_id) 
-        print('anime')
-        print(anime)
         vote_count = int(anime.votes) + 1
         anime.votes = str(vote_count)
         anime.save()
-        
-        return JsonResponse({
+        response = JsonResponse({
             'success': True,
         })
+        response.set_cookie(username, anime.a_id)
+        return response
     except Exception as e:
         print('something went wrong')
         print(e)
@@ -93,7 +90,8 @@ def result(request, username):
     ''' Render poll results by user '''
     try:      
         poll = Poll.objects.get(user=username)
-        #.order_by('-votes')
-    except:
+        return render(request, 'poll/result.html', {'user': username, 'poll': poll})
+    except Exception as e:
+        print('result exception')
+        print(e)
         return render(request, 'poll/index.html', {'error': 'Poll not found'})
-    return render(request, 'poll/result.html', { 'user': username, 'poll': poll })
