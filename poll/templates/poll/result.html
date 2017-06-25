@@ -1,0 +1,39 @@
+{% extends 'poll/layout.html' %}
+{% load staticfiles %}
+{% block title %}Pick.moe - {{user}}{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'poll/styles/poll.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="section" id="poll">
+    <div class="is-narrow div mcenter">
+      <h1 class="tcenter">
+        <a href="http://myanimelist.net/profile/{{user}}" rel="oopener noreferrer" target="_blank">{{user}}</a> should watch:
+      </h1>
+      <div class="box">
+        <div class="content">
+          <p class="tcenter">
+            <a href="https://myanimelist.net/anime/{{poll.anime_set.all.0}}/" rel="noopener noreferrer" target="_blank" title={{poll.anime_set.all.0.title}}> {{poll.anime_set.all.0.title}}
+          </p>
+          <figure class="tcenter">
+            <img src="{{poll.anime_set.all.0.image}}" alt="{{poll.anime_set.all.0.title}}">
+          </figure>
+        </div>
+        <div class="box">
+          <h1 class="tcenter">Vote Totals:</h1>
+          <ul>
+            {% for anime in poll.anime_set.all %}
+              <li data-animeID={{anime.a_id}} style="cursor: default">
+                <div class="columns is-mobile">
+                  <div class="column is-10">{{anime.title}}</div>
+                  <div class="column is-2 vote-count">{{anime.votes}}</div>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>               
+{% endblock %}

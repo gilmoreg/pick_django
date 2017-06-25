@@ -14,7 +14,7 @@
       <div class="box">
         <ul>
           {% for anime in poll.anime_set.all %}
-            <li data-animeID="{{anime.id}}">
+            <li data-animeID="{{anime.a_id}}">
               <div class="columns is-mobile">
                 <div class="column is-2">
                   <img src="{{anime.image}}" alt="{{anime.title}}">
