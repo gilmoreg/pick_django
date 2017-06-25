@@ -1,11 +1,11 @@
 ''' Django Views '''
 import json
+from datetime import datetime
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from controllers import mal
-from .models import Poll
-from datetime import datetime
+from poll.controllers import mal
+from poll.models import Poll
 
 def index(request):
     ''' Render the homepage '''
@@ -13,11 +13,12 @@ def index(request):
 
 def poll(request, username):
     ''' Render a poll by user '''
-    try:      
-        poll = Poll.objects.get(user=username)
-    except:
+    try:
+        get_poll = Poll.objects.get(user=username)
+    except Exception as e:
+        print e
         return render(request, 'poll/index.html', {'error': 'Poll not found'})
-    return render(request, 'poll/poll.html', { 'user': username, 'poll': poll })
+    return render(request, 'poll/poll.html', {'user': username, 'poll': get_poll})
 
 @csrf_exempt
 def create_poll(request):
@@ -33,14 +34,14 @@ def create_poll(request):
     if not username:
         return render(request, 'poll/index.html', {'error': 'Invalid credentials'})
     try:
-        poll = Poll.objects.get(user=username)
-        if poll:
+        get_poll = Poll.objects.get(user=username)
+        if get_poll:
             # Only way to cascade delete all of the Anime objects
-            poll.delete()
-    except:
-        print('Creating poll')
-    poll = Poll.objects.create(user=username, list_origin='myanimelist', created=datetime.now())
-    mal.save_poll_options(poll, username)
+            get_poll.delete()
+    except Exception as e:
+        print '' # do nothing - this just means this is a new poll and not a real error
+    get_poll = Poll.objects.create(user=username, list_origin='myanimelist', created=datetime.now())
+    mal.save_poll_options(get_poll, username)
     return JsonResponse({
         'success': True,
         'user': username
@@ -55,9 +56,13 @@ def vote(request, username):
     # if voted already, go straight to results
     if username in request.COOKIES:
         try:
-            poll = Poll.objects.get(user=username)
-            return render(request, 'poll/result.html', { 'user': username, 'poll': poll, 'vote': request.COOKIES[username] })
-        except:
+            get_poll = Poll.objects.get(user=username)
+            return render(request, 'poll/result.html',
+                          {'user': username,
+                           'poll': get_poll,
+                           'vote': request.COOKIES[username]})
+        except Exception as e:
+            print e
             return render(request, 'poll/index.html', {'error': 'Poll not found'})
 
     a_id = ''
@@ -69,8 +74,8 @@ def vote(request, username):
             'message': 'ID not supplied'
         }, status=400)
     try:
-        poll = Poll.objects.get(user=username)
-        anime = poll.anime_set.get(a_id=a_id) 
+        get_poll = Poll.objects.get(user=username)
+        anime = get_poll.anime_set.get(a_id=a_id)
         vote_count = int(anime.votes) + 1
         anime.votes = str(vote_count)
         anime.save()
@@ -80,8 +85,7 @@ def vote(request, username):
         response.set_cookie(username, anime.a_id)
         return response
     except Exception as e:
-        print('something went wrong')
-        print(e)
+        print e
         return JsonResponse({
             'success': False,
             'message': 'Invalid ID or anime not found'
@@ -89,10 +93,9 @@ def vote(request, username):
 
 def result(request, username):
     ''' Render poll results by user '''
-    try:      
-        poll = Poll.objects.get(user=username)
-        return render(request, 'poll/result.html', {'user': username, 'poll': poll})
+    try:
+        get_poll = Poll.objects.get(user=username)
+        return render(request, 'poll/result.html', {'user': username, 'poll': get_poll})
     except Exception as e:
-        print('result exception')
-        print(e)
+        print e
         return render(request, 'poll/index.html', {'error': 'Poll not found'})
