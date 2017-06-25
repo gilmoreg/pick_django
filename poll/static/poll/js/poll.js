@@ -47,7 +47,8 @@ const Poll = (() => {
     let url = window.location.pathname;
     if (url[url.length - 1] === '/') url = url.slice(0, -1);
     apiCall(`${url}/vote`, { id })
-    .then(() => {
+    .then((res) => {
+      console.log(res);
       window.location.assign(`${url}/result`);
     })
     .catch((err) => {

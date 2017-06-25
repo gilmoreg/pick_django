@@ -45,6 +45,7 @@ def create_poll(request):
         'user': username
     })
 
+@csrf_exempt
 def vote(request, username):
     '''
     Vote on a poll
@@ -60,14 +61,20 @@ def vote(request, username):
         }, status=400)
     try:
         poll = Poll.objects.get(user=username)
-        anime = poll.anime_set.get(a_id=a_id)
+        print('poll')
+        print(poll)
+        anime = poll.anime_set.get(a_id=a_id) #.order_by('-votes')
+        print('anime')
+        print(anime)
         vote_count = int(anime.votes) + 1
         anime.votes = str(vote_count)
         anime.save()
         return JsonResponse({
             'success': True,
         })
-    except:
+    except Exception as e:
+        print('something went wrong')
+        print(e)
         return JsonResponse({
             'success': False,
             'message': 'Invalid ID or anime not found'
