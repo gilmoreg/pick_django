@@ -23,7 +23,7 @@
         <div class="box">
           <h1 class="tcenter">Vote Totals:</h1>
           <ul>
-            {% for anime in poll.anime_set.all %}
+            {% for anime in poll.anime_set.all|dictsort:"votes" %}
               <li data-animeID={{anime.a_id}} style="cursor: default">
                 <div class="columns is-mobile">
                   <div class="column is-10">{{anime.title}}</div>

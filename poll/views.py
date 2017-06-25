@@ -51,6 +51,14 @@ def vote(request, username):
     Vote on a poll
     POST body: id (the id of the anime voted for)
     '''
+    # if voted already, go straight to results
+    if username in request.COOKIES:
+        try:
+            poll = Poll.objects.get(user=username)
+            return render(request, 'poll/result.html', { 'user': username, 'poll': poll, 'vote': request.COOKIES[username] })
+        except:
+            return render(request, 'poll/index.html', {'error': 'Poll not found'})
+
     a_id = ''
     for i in request:
         a_id = json.loads(i)['id']
@@ -63,12 +71,13 @@ def vote(request, username):
         poll = Poll.objects.get(user=username)
         print('poll')
         print(poll)
-        anime = poll.anime_set.get(a_id=a_id) #.order_by('-votes')
+        anime = poll.anime_set.get(a_id=a_id) 
         print('anime')
         print(anime)
         vote_count = int(anime.votes) + 1
         anime.votes = str(vote_count)
         anime.save()
+        
         return JsonResponse({
             'success': True,
         })
@@ -84,6 +93,7 @@ def result(request, username):
     ''' Render poll results by user '''
     try:      
         poll = Poll.objects.get(user=username)
+        #.order_by('-votes')
     except:
         return render(request, 'poll/index.html', {'error': 'Poll not found'})
     return render(request, 'poll/result.html', { 'user': username, 'poll': poll })
