@@ -1,15 +1,15 @@
-*pyc
 .vscode
 notes
-
 __pycache__
+.Python
+
+
 bin
 include
 lib
-migrations
 
-pip-selfcheck.json
-manage.py
-.Python
-
-pick
+venv
+*.pyc
+staticfiles
+.env
+db.sqlite3
