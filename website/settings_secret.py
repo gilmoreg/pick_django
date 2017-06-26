@@ -3,7 +3,6 @@ import os
 
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
-    SECRET_KEY = ''
 except KeyError:
     DATABASE_URL = 'localhost'
 
