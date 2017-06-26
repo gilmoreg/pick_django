@@ -42,7 +42,7 @@ def save_poll_options(poll, username):
             a = Anime.objects.create(a_id=anime_id, title=anime_title, image=anime_image, poll=poll, votes='0')
             if not a:
                 print('Error creating anime {anime_title}')
-    except Exception, e:
+    except Exception as e:
         print('Something went wrong!')
         print(e)
         return []

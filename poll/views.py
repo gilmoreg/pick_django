@@ -22,7 +22,7 @@ def poll(request, username):
                            'poll': get_poll,
                            'vote': request.COOKIES[username]})
     except Exception as e:
-        print e
+        print(e)
         return render(request, 'poll/index.html', {'error': 'Poll not found'})
     return render(request, 'poll/poll.html', {'user': username, 'poll': get_poll})
 
@@ -45,7 +45,7 @@ def create_poll(request):
             # Only way to cascade delete all of the Anime objects
             get_poll.delete()
     except Exception as e:
-        print '' # do nothing - this just means this is a new poll and not a real error
+        print('') # do nothing - this just means this is a new poll and not a real error
     get_poll = Poll.objects.create(user=username, list_origin='myanimelist', created=datetime.now())
     mal.save_poll_options(get_poll, username)
     return JsonResponse({
@@ -79,7 +79,7 @@ def vote(request, username):
         response.set_cookie(username, anime.a_id)
         return response
     except Exception as e:
-        print e
+        print(e)
         return JsonResponse({
             'success': False,
             'message': 'Invalid ID or anime not found'
@@ -91,5 +91,5 @@ def result(request, username):
         get_poll = Poll.objects.get(user=username)
         return render(request, 'poll/result.html', {'user': username, 'poll': get_poll})
     except Exception as e:
-        print e
+        print(e)
         return render(request, 'poll/index.html', {'error': 'Poll not found'})
