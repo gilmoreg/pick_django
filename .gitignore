@@ -1,7 +1,6 @@
 *pyc
 .vscode
 notes
-settings_secret*
 
 __pycache__
 bin
