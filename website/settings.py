@@ -20,9 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$gn&5=gl!e1q2dwed8oe8*e3ju!#-4e%_jidq0=*j1^ik@g04t'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -34,7 +31,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'poll.apps.PollConfig',
+    'poll',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
